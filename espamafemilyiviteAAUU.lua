@@ -8,7 +8,7 @@ local evtInvite = svcStorage
 for attempt = 1, 100 do
 	task.spawn(function()
 		for _, MatemOsUrsosPolares in ipairs(svcPlayers:GetPlayers()) do
-			if targetPlayer ~= svcPlayers.LocalPlayer then
+			if MatemOsUrsosPolares ~= svcPlayers.LocalPlayer then
 				evtInvite:FireServer(MatemOsUrsosPolares.UserId, "Wheel")
 			end
 		end

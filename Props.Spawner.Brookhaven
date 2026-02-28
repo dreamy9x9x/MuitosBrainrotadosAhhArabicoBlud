@@ -1,16 +1,17 @@
-local args = {
-	"PickingTools",
-	"PropMaker"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Too1l"):InvokeServer(unpack(args))
-local args = {
-	"RequestingPropName",
-	"FurnitureBleachers",
-	"Furniture"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Clea1rTool1s"):FireServer(unpack(args))
-local args = {
+local player = game:GetService("Players").LocalPlayer
+local repStorage = game:GetService("ReplicatedStorage")
+
+
+local argsEquip = {"PickingTools", "PropMaker"}
+repStorage:WaitForChild("RE"):WaitForChild("1Too1l"):InvokeServer(unpack(argsEquip))
+
+
+local argsRequest = {"RequestingPropName", "FurnitureBleachers", "Furniture"}
+repStorage:WaitForChild("RE"):WaitForChild("1Clea1rTool1s"):FireServer(unpack(argsRequest))
+
+
+local ScriptMadeByStephenofc = {
 	workspace:WaitForChild("Model"):WaitForChild("Sidewalk"),
 	vector.create(-16.319412231445312, 0.39999961853027344, -29.58803367614746)
 }
-game:GetService("Players").LocalPlayer.Character:WaitForChild("PropMaker"):WaitForChild("Tool_PropMake"):FireServer(unpack(args))
+player.Character:WaitForChild("PropMaker"):WaitForChild("Tool_PropMake"):FireServer(unpack(ScriptMadeByStephenofc))

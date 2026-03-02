@@ -1,0 +1,65 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local function getCharacter()
+	return player.Character or player.CharacterAdded:Wait()
+end
+
+local function findCuffs()
+	local character = getCharacter()
+	local backpack = player:FindFirstChildOfClass("Backpack")
+
+	if character then
+		local tool = character:FindFirstChild("Cuffs")
+		if tool and tool:IsA("Tool") then
+			return tool
+		end
+	end
+
+	if backpack then
+		local tool = backpack:FindFirstChild("Cuffs")
+		if tool and tool:IsA("Tool") then
+			return tool
+		end
+	end
+
+	return nil
+end
+
+local function setGripUp(tool)
+	
+	
+	local currentGrip = tool.Grip
+	local orientationOnly = currentGrip - currentGrip.Position
+	tool.Grip = CFrame.new(0, 90000, 0) * orientationOnly
+end
+
+local function equip(tool)
+	local character = getCharacter()
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	if humanoid and tool then
+		humanoid:EquipTool(tool)
+	end
+end
+
+local function unequipAll()
+	local character = getCharacter()
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid:UnequipTools()
+	end
+end
+
+
+while true do
+	local cuffs = findCuffs()
+	if not cuffs then
+		break 
+	end
+
+	setGripUp(cuffs)
+	equip(cuffs)
+	task.wait(0.2)
+	unequipAll()
+	task.wait(0.2)
+end

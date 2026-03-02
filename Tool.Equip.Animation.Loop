@@ -1,5 +1,10 @@
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
+local args = {
+	"PickingTools",
+	"Cuffs"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Too1l"):InvokeServer(unpack(args))
 
 local function getCharacter()
 	return player.Character or player.CharacterAdded:Wait()

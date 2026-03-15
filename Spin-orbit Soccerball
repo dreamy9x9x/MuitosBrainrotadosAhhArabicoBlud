@@ -1,0 +1,149 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+
+local LocalPlayer = Players.LocalPlayer
+
+
+local function equipBola()
+
+local backpack = LocalPlayer:FindFirstChild("Backpack")  
+if not backpack then return false end  
+
+local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()  
+
+local bola =  
+    backpack:FindFirstChild("SoccerBall")  
+    or char:FindFirstChild("SoccerBall")  
+
+if not bola then  
+
+    local args = { "PickingTools", "SoccerBall" }  
+
+    pcall(function()  
+        ReplicatedStorage  
+            :WaitForChild("RE")  
+            :WaitForChild("1Too1l")  
+            :InvokeServer(unpack(args))  
+    end)  
+
+    local start = tick()  
+
+    repeat  
+        bola = backpack:FindFirstChild("SoccerBall")  
+        task.wait()  
+    until bola or tick() - start > 5  
+
+    if not bola then  
+        warn("Falha ao pegar bola")  
+        return false  
+    end  
+end  
+
+bola.Parent = char  
+return true
+
+end
+
+
+local function spawnBall()
+
+local char = LocalPlayer.Character  
+local hrp = char:WaitForChild("HumanoidRootPart")  
+
+char  
+    :WaitForChild("SoccerBall")  
+    :WaitForChild("FootballInteraction")  
+    :FireServer(hrp.CFrame)
+
+end
+
+
+local function getBall()
+
+local workspaceCom = Workspace:WaitForChild("WorkspaceCom")  
+local soccerBalls = workspaceCom:WaitForChild("001_SoccerBalls")  
+
+local ball  
+local start = tick()  
+
+repeat  
+
+    ball = soccerBalls:FindFirstChild("Soccer"..LocalPlayer.Name)  
+
+    task.wait()  
+
+until ball or tick() - start > 5  
+
+return ball
+
+end
+
+
+local function startOrbitalBall()
+
+local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()  
+local hrp = char:WaitForChild("HumanoidRootPart")  
+
+if not equipBola() then return end  
+
+task.wait(0.2)  
+
+spawnBall()  
+
+task.wait(0.4)  
+
+
+local ball = getBall()  
+
+if not ball then  
+    warn("ball not found")  
+    return  
+end  
+
+
+ball.Anchored = false  
+ball.CanCollide = true  
+
+
+
+ball.CustomPhysicalProperties = PhysicalProperties.new(  
+    100,  
+    0.3,  
+    0.5  
+)  
+
+
+local orbitRadius = 5  
+local orbitSpeed = 2.5  
+local flingForce = 25000  
+
+
+RunService.Heartbeat:Connect(function()  
+
+    local t = tick() * orbitSpeed  
+
+    local offset = Vector3.new(  
+        math.cos(t) * orbitRadius,  
+        0.1, -- offset mínimo para evitar problemas de colisão  
+        math.sin(t) * orbitRadius  
+    )  
+
+    local targetPos = hrp.Position + offset  
+
+
+    
+    ball.CFrame = CFrame.new(targetPos)  
+
+
+    
+    ball.AssemblyLinearVelocity = Vector3.new(  
+        math.random(-flingForce, flingForce),  
+        flingForce,  
+        math.random(-flingForce, flingForce)  
+    )  
+
+end)
+
+end

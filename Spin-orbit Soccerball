@@ -116,8 +116,8 @@ ball.CustomPhysicalProperties = PhysicalProperties.new(
 
 
 local orbitRadius = 5  
-local orbitSpeed = 2.5  
-local flingForce = 25000  
+local orbitSpeed = 2
+local flingForce = 40000  
 
 
 RunService.Heartbeat:Connect(function()  

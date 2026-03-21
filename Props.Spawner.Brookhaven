@@ -1,1 +1,46 @@
-local a=game:GetService("Players").LocalPlayer;local b=game:GetService("ReplicatedStorage")local c={"PickingTools","PropMaker"}b:WaitForChild("RE"):WaitForChild("1Too1l"):InvokeServer(unpack(c))local d={"RequestingPropName","FurnitureBleachers","Furniture"}b:WaitForChild("RE"):WaitForChild("1Clea1rTool1s"):FireServer(unpack(d))local e={workspace:WaitForChild("Model"):WaitForChild("Sidewalk"),vector.create(-16.319412231445312,0.39999961853027344,-29.58803367614746)}a.Character:WaitForChild("PropMaker"):WaitForChild("Tool_PropMake"):FireServer(unpack(e))print("Prop Spawner Script made by Stephenofc")
+local player = game:GetService("Players").LocalPlayer
+local replicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Ferramentas a serem solicitadas
+local toolsRequest = {"PickingTools", "PropMaker"}
+
+-- Invoca o servidor para pegar as tools
+replicatedStorage:WaitForChild("RE"):WaitForChild("1Too1l"):InvokeServer(unpack(toolsRequest))
+
+-- Garante que o PropMaker vá para o Character
+local function movePropMakerToCharacter()
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    -- Espera a tool aparecer (Backpack ou Character)
+    local propMaker = player:WaitForChild("Backpack"):FindFirstChild("PropMaker")
+        or character:FindFirstChild("PropMaker")
+
+    -- Caso ainda não tenha chegado, aguarda
+    while not propMaker do
+        propMaker = player.Backpack:FindFirstChild("PropMaker")
+            or character:FindFirstChild("PropMaker")
+        task.wait()
+    end
+
+    -- Move para o Character (equipa automaticamente)
+    propMaker.Parent = character
+end
+
+movePropMakerToCharacter()
+
+-- Limpa ferramentas / configura prop
+local clearRequest = {"RequestingPropName", "FurnitureBleachers", "Furniture"}
+replicatedStorage:WaitForChild("RE"):WaitForChild("1Clea1rTool1s"):FireServer(unpack(clearRequest))
+
+-- Dados do prop
+local propArgs = {
+    workspace:WaitForChild("Model"):WaitForChild("Sidewalk"),
+    Vector3.new(-16.319412231445312, 0.39999961853027344, -29.58803367614746)
+}
+
+-- Dispara criação do prop
+player.Character:WaitForChild("PropMaker")
+    :WaitForChild("Tool_PropMake")
+    :FireServer(unpack(propArgs))
+
+print("Prop Spawner Script made by Stephenofc")

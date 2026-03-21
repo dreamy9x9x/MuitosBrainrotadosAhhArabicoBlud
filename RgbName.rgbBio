@@ -1,0 +1,30 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local RemoteName = "1RPNam1eColo1r"
+local RE = ReplicatedStorage:WaitForChild("RE"):WaitForChild(RemoteName)
+
+-- Função para converter HSV em RGB
+local function HSVtoRGB(h, s, v)
+	return Color3.fromHSV(h, s, v)
+end
+
+-- Loop de atualização
+spawn(function()
+	local hue = 0
+	while true do
+		wait(0.03) -- taxa de atualização (~30 FPS)
+		hue = (hue + 0.005) % 1 -- incrementa o hue para efeito RGB contínuo
+
+		-- Atualiza cor do nome se habilitado
+		if getgenv().RgbName then
+			local color = HSVtoRGB(hue, 1, 1)
+			RE:FireServer("PickingRPNameColor", color)
+		end
+
+		-- Atualiza cor da bio se habilitado
+		if getgenv().RgbBio then
+			local color = HSVtoRGB(hue, 1, 1)
+			RE:FireServer("PickingRPBioColor", color)
+		end
+	end
+end)
